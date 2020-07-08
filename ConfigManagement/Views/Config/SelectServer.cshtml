@@ -1,0 +1,127 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SelectServer</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+        </div>
+
+        <div class="layuimini-main">
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" id="synchronousAllBtn">同步全部</button>
+                    <button class="layui-btn" id="synchronousSelectBtn">同步选择</button>
+                    <button class="layui-btn layui-btn-primary" id="cancelBtn">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script src="~/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script>
+        var table;
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        var tabledata;
+        layui.use(['form', 'table'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                layuimini = layui.layuimini;
+
+            table = layui.table;
+
+            table.render({
+                elem: '#currentTableId',
+                url: '/Api/GetServerList',
+                cols: [[
+                { type: "checkbox", width: 50, fixed: "left" },
+                { field: 'guid', title: 'guid', hide: true },
+                { field: 'businessName', width: 150, title: '业务分类' },
+                { field: 'serverAddress', Width: 150, title: '服务器地址' },
+                { field: 'port', width: 100, title: '端口' },
+                ]],
+                done: function (res) {
+                    parent.layer.iframeAuto(index);
+                    tabledata = res;
+			    }
+            });
+
+            $("#cancelBtn").click(function () {
+                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(iframeIndex);
+            });
+
+            var loadindex = "";
+            //同步全部服务器
+            $("#synchronousAllBtn").click(function () {
+                loadindex = layer.load();
+                var request = { "ConfigInfos": tabledata.data, "ServerInfos": parent.selectdata };
+                configSynchronous(request);
+            });
+
+            //同步选择的服务器
+            $("#synchronousSelectBtn").click(function () {
+                var checkStatus = table.checkStatus('currentTableId');
+                var data = checkStatus.data;
+                if (data == null || data.length === 0) {
+                    parent.layer.alert("请选择服务器")
+                    return;
+                }
+                loadindex = layer.load();
+                var request = { "ConfigInfos": data, "ServerInfos": parent.selectdata };
+                configSynchronous(request);
+            });
+
+            function configSynchronous(data) {
+                $.ajax({
+                    type: 'post',
+                    url: '/Api/ConfigSynchronous',
+                    cache: false,
+                    async: true,
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function (result) {
+                        layer.close(loadindex);
+                        if (result.code == "0") {
+                            parent.layer.alert("同步成功");
+                        } else if(result.code == "1"){
+                            parent.layer.alert(result.msg);
+                        } else if (result.code == "-2") {
+                            layer.msg(result.msg);
+                            parent.parent.parent.window.location.href = '/Login';
+                        }
+                        else {
+                            parent.layer.alert(result.msg);
+                        }
+                    },
+                    error: function (msg) {
+                         layer.close(loadindex);
+                        parent.layer.alert("同步成功");
+                    }
+                });
+            }
+
+            //监听表格复选框选择
+            table.on('checkbox(currentTableFilter)', function (obj) {
+                console.log(obj)
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewData["Title"] = "集群服务器列表";
+    Layout = "~/Views/Shared/_ListLayout.cshtml";
+    string typeName = "Server";
+    ViewBag.AddUrl = $"/Add{typeName}Info";
+    ViewBag.DeleteUrl = $"/Api/Delete{typeName}Info";
+    ViewBag.UpdateUrl = $"/Update{typeName}Info";
+    ViewBag.ListUrl = $"/Api/Get{typeName}List";
+}
+
+@section cols{
+    [[
+    { type: "checkbox", width: 50, fixed: "left" },
+    { field: 'guid', title: 'guid', hide: true },
+    { field: 'businessGuid', title: 'businessGuid', hide: true },
+    { field: 'businessName', width: 150, title: '业务分类' },
+    { field: 'serverAddress', minWidth: 500, title: '服务器地址' },
+    { field: 'port', width: 100, title: '端口' },
+    { field: 'userName', width: 100, title: '用户名' },
+    { title: '操作', width: 200, templet: '#currentTableBar', fixed: "right", align: "center" }
+    ]]
+}
+
+@section ListButton{
+    <a class="layui-btn layui-btn-xs layui-btn-normal data-count-ftptest" lay-event="ftptest">测试FTP</a>
+}
+
+@section ListButtonClick{
+    else if(obj.event === 'ftptest')
+    {
+    var loadindex = "";
+    loadindex = layer.load();
+    var data = obj.data;
+    console.log(data);
+    $.ajax({
+    type: 'get',
+    url: '/Api/FTPTestConnection?guid='+data.guid,
+    cache: false,
+    async: true,
+    success: function (result) {
+    layer.close(loadindex);
+    if (result.code == "0") {
+    layer.alert("成功");
+    }else if (result.code == "-2") {
+    layer.msg(result.msg);
+    parent.parent.parent.window.location.href = '/Login';
+    }
+    else {
+    layer.alert('失败 '+result.msg);
+    }
+    },
+    error: function (msg) {
+    layer.msg("系统异常");
+    }
+    });
+    }
+}
+
+@section Css{
+}
+
+@section Scripts{
+}
+

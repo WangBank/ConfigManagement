@@ -1,0 +1,37 @@
+﻿@model Tasks
+@{
+    ViewData["Title"] = "更新任务信息";
+    Layout = "~/Views/Shared/_OperationLayout.cshtml";
+    ViewBag.Url = "/Api/UpdateTaskInfo";
+}
+<input type="hidden" name="guid" value="@Model.Guid">
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">任务名称</label>
+    <div class="layui-input-block">
+        <input type="text" name="name" lay-verify="required" lay-reqtext="任务名称不能为空" placeholder="请输入任务名称" value="" class="layui-input">
+        <tip>填写任务名称</tip>
+    </div>
+</div>
+
+
+<div class="layui-form-item">
+    <label class="layui-form-label">描述</label>
+    <div class="layui-input-block">
+        <textarea placeholder="请输入内容" name="description"  value="" class="layui-textarea"></textarea>
+        <tip>填写描述</tip>
+    </div>
+</div>
+
+@section Css{
+}
+
+@section Scripts{
+}
+
+@section Form{
+    form.val("form", {
+    "name": "@Html.Raw(Model.Name)",
+    "description": "@Html.Raw(Model.Description)"
+    });
+}

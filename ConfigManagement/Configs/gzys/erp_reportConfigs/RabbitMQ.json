@@ -1,0 +1,15 @@
+﻿[
+  {
+    "ServerUrl": "172.18.231.180",
+    "ServerPort": "5672",
+    "UserName": "romens",
+    "Password": "romens",
+    "ExchangeName": "LogExchange",
+    "ExchangeType": "direct",
+    "QueueName": "Log",
+    "RoutingKey": "TopicLogger.*",
+    "Durable": "true",
+    "Exclusive": "false",
+    "AutoDelete": "false"
+  }
+]

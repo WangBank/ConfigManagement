@@ -1,0 +1,56 @@
+﻿@model Script
+@{
+    ViewData["Title"] = "更新脚本信息";
+    Layout = "~/Views/Shared/_OperationLayout.cshtml";
+    ViewBag.Url = "/Api/UpdateScriptInfo";
+}
+<input type="hidden" name="guid" value="@Model.Guid">
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">脚本名称</label>
+    <div class="layui-input-block">
+        <input type="text" name="name" lay-verify="required" lay-reqtext="脚本名称不能为空" placeholder="请输入脚本名称" value="" class="layui-input">
+        <tip>填写脚本名称</tip>
+    </div>
+</div>
+
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">脚本内容</label>
+    <div class="layui-input-block">
+        <textarea placeholder="请输入或者从文件中导入" name="scriptContent" lay-verify="required" value="" class="layui-textarea" id="scriptContent"></textarea>
+        <tip>务必在某账套中测试一下脚本内容</tip>
+    </div>
+
+    <div class="layui-upload-drag layui-input-block" id="importFile">
+        <i class="layui-icon"></i>
+        <p>点击上传，或将文件拖拽到此处</p>
+        <div class="layui-hide" id="uploadDemoView">
+            <hr>
+            <img src="" alt="上传成功后渲染" style="max-width: 196px">
+        </div>
+    </div>
+
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label">描述</label>
+    <div class="layui-input-block">
+        <textarea placeholder="请输入内容" name="description"  value="" class="layui-textarea"></textarea>
+        <tip>填写描述</tip>
+    </div>
+</div>
+
+@section Css{
+}
+
+@section Scripts{
+}
+
+@section Form{
+    form.val("form", {
+    "name": "@Html.Raw(Model.Name)",
+    "scriptContent": "@Html.Raw(Model.ScriptContent)",
+    "description": "@Html.Raw(Model.Description)"
+    });
+}

@@ -1,0 +1,122 @@
+﻿@model DataBaseInfo
+@{
+    ViewData["Title"] = "修改";
+    Layout = "~/Views/Shared/_OperationLayout.cshtml";
+    ViewBag.Url = "/Api/UpdateDataBaseInfo";
+}
+<input type="hidden" name="Guid" value="@Model.Guid">
+<div class="layui-form-item">
+    <label class="layui-form-label required">数据库类型</label>
+    <div class="layui-input-block">
+        <select name="DataBaseType" lay-verify="">
+            <option value="Oracle">Oracle</option>
+        </select>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">业务类型</label>
+    <div class="layui-input-block">
+        <select name="BusinessType" lay-verify="">
+            <option value="业务中间层">业务中间层</option>
+            <option value="报表中间层">报表中间层</option>
+        </select>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">账套号</label>
+    <div class="layui-input-block">
+        <input type="text" name="AccountSetNumber" lay-verify="required" lay-reqtext="账套号不能为空" placeholder="请输入账套号" value="" class="layui-input">
+        <tip>填写账套号</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">账套名称</label>
+    <div class="layui-input-block">
+        <input type="text" name="AccountSetName" lay-verify="required" lay-reqtext="账套名称不能为空" placeholder="请输入账套名称" value="" class="layui-input">
+        <tip>填写账套名称</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">服务器地址</label>
+    <div class="layui-input-block">
+        <input type="text" name="ServerAddress" lay-verify="required" lay-reqtext="服务器地址不能为空" placeholder="请输入服务器地址" value="" class="layui-input">
+        <tip>填写服务器地址</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label">端口</label>
+    <div class="layui-input-block">
+        <input type="text" name="Port" placeholder="请输入端口" value="" class="layui-input">
+        <tip>填写端口</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">用户名</label>
+    <div class="layui-input-block">
+        <input type="text" name="UserName" lay-verify="required" lay-reqtext="用户名不能为空" placeholder="请输入用户名" value="" class="layui-input">
+        <tip>填写用户名</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">密码</label>
+    <div class="layui-input-block">
+        <input type="password" name="UserPassword" lay-verify="required" lay-reqtext="密码不能为空" placeholder="请输入密码" value="" class="layui-input">
+        <tip>填写密码</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">数据库名称</label>
+    <div class="layui-input-block">
+        <input type="text" name="DataBaseName" lay-verify="required" lay-reqtext="数据库名称不能为空" placeholder="请输入数据库名称" value="" class="layui-input">
+        <tip>填写数据库名称</tip>
+    </div>
+</div>
+
+@*<div class="layui-form-item">
+    <label class="layui-form-label required">数据库密码</label>
+    <div class="layui-input-block">
+        <input type="password" name="DataBasePassword" lay-verify="required" lay-reqtext="数据库密码不能为空" placeholder="请输入数据库密码" value="" class="layui-input">
+        <tip>填写数据库密码</tip>
+    </div>
+</div>*@
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">连接串附加内容</label>
+    <div class="layui-input-block">
+        <input type="text" name="ConnectionStringOther" placeholder="请输入数据库连接串附加内容" value="" class="layui-input">
+        <tip>数据库连接串附加内容比如:Pooling=true;Min Pool Size=1;Max Pool Size=32;</tip>
+    </div>
+</div>
+
+@section Css{
+}
+
+@section Scripts{
+}
+
+@section Form{
+    form.val("form", {
+    "DataBaseType": "@Html.Raw(Model.DataBaseType)",
+    "AccountSetNumber": "@Html.Raw(Model.AccountSetNumber)",
+    "AccountSetName": "@Html.Raw(Model.AccountSetName)",
+    "ServerAddress": "@Html.Raw(Model.ServerAddress)",
+    "Port": "@Html.Raw(Model.Port)",
+    "UserName": "@Html.Raw(Model.UserName)",
+    "UserPassword": "@Html.Raw(Model.UserPassword)",
+    "DataBaseName": "@Html.Raw(Model.DataBaseName)",
+    @*"DataBasePassword": "@Html.Raw(Model.DataBasePassword)",*@
+    "ConnectionStringOther":"@Html.Raw(Model.ConnectionStringOther)",
+    "BusinessType":"@Html.Raw(Model.BusinessType)"
+    });
+}
+
+
+

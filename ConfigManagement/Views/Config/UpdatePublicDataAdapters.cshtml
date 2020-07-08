@@ -1,0 +1,54 @@
+﻿@model ConfigManagement.Models.Config.PublicDataAdapters
+
+@{
+    ViewData["Title"] = "UpdatePublicDataAdapters";
+    Layout = "~/Views/Shared/_OperationLayout.cshtml";
+    ViewBag.Url = $"/Api/UpdatePublicDataAdapters?guid={ViewBag.Guid}";
+}
+
+<input type="hidden" name="DataAdapterAlias" value="@Html.Raw(Model.DataAdapterAlias)" />
+<input type="hidden" name="DataAdapterType" value="@Html.Raw(Model.DataAdapterType)" />
+<input type="hidden" name="DataAdapterInfo" value="@Html.Raw(Model.DataAdapterInfo)" />
+<input type="hidden" name="DataAdapterAccountName" value="@Html.Raw(Model.DataAdapterAccountName)" />
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">账套名称</label>
+    <div class="layui-input-block">
+        <input type="text" name="NewDataAdapterAccountName" lay-verify="required" lay-reqtext="账套名称不能为空" placeholder="请输入账套名称" value="" class="layui-input">
+        <tip>填写账套名称</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">账套号</label>
+    <div class="layui-input-block">
+        <input type="text" name="NewDataAdapterAlias" lay-verify="required" lay-reqtext="账套号不能为空" placeholder="请输入账套号" value="" class="layui-input">
+        <tip>填写账套号</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">数据库类型</label>
+    <div class="layui-input-block">
+        <input type="text" name="NewDataAdapterType" lay-verify="required" lay-reqtext="数据库类型不能为空" placeholder="请输入数据库类型" value="" class="layui-input">
+        <tip>填写数据库类型</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">数据库加密连接</label>
+    <div class="layui-input-block">
+        <textarea name="NewDataAdapterInfo" lay-verify="required" lay-reqtext="数据库加密连接不能为空" placeholder="请输入数据库加密连接" class="layui-textarea"></textarea>
+        <tip>填写数据库加密连接</tip>
+    </div>
+</div>
+
+@section Form{
+    form.val("form", {
+    "NewDataAdapterAlias": "@Html.Raw(Model.DataAdapterAlias)",
+    "NewDataAdapterType": "@Html.Raw(Model.DataAdapterType)",
+    "NewDataAdapterInfo": "@Html.Raw(Model.DataAdapterInfo)",
+    "NewDataAdapterAccountName": "@Html.Raw(Model.DataAdapterAccountName)",
+    });
+}
+

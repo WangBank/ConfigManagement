@@ -1,0 +1,120 @@
+﻿
+@{
+    ViewData["Title"] = "配置文件列表";
+    Layout = "~/Views/Shared/_ListLayout.cshtml";
+    string typeName = "Config";
+    ViewBag.AddUrl = $"/Add{typeName}Info";
+    ViewBag.DeleteUrl = $"/Api/Delete{typeName}Info";
+    ViewBag.UpdateUrl = $"/Update{typeName}Info";
+    ViewBag.ListUrl = $"/Api/Get{typeName}List";
+}
+
+
+@section cols{
+    [[
+    { type: "checkbox", width: 50, fixed: "left" },
+    { field: 'guid', title: 'guid', hide: true },
+    { field: 'configName', width: 190, title: '配置文件名' },
+    { field: 'categoryType', width: 150, title: '配置文件类别', sort: true },
+    { field: 'configPath', minwidth: 350, title: '配置文件路径' },
+    { field: 'localPath', minwidth: 350, title: '本地路径' },
+    { field: 'isSystem', width: 150, title: '是否是系统文件', sort: true , templet: function(d){
+    if (d.isSystem=="1") {
+    return "是";
+    } else if (d.isSystem=="0") {
+    return "否";
+    }
+    }},
+    { field: 'updateUrl', title: '更新页面地址', width: 150, hide: true},
+    { field: 'remarks', title: '备注', minWidth: 150, hide: true},
+    { field: 'createDate', width: 200, title: '创建时间',templet:'<div>{{ layui.util.toDateString(d.pressTime, "yyyy-MM-dd HH:mm:ss") }}</div>', hide: true},
+    { title: '操作', width: 300, templet: '#currentTableBar', fixed: "right", align: "center" }
+    ]]
+}
+
+@section ToolbarButton{
+    <button class="layui-btn layui-btn-sm layui-btn-normal data-synchronous-btn"> 同步 </button>
+}
+
+@section ListButton{
+    <a class="layui-btn layui-btn-xs layui-btn-normal data-count-see" lay-event="see">查看文件</a>
+    @*<a class="layui-btn layui-btn-xs layui-btn-normal data-count-update" lay-event="update">修改文件</a>*@
+    <a class="layui-btn layui-btn-xs layui-btn-normal data-count-synchronous" lay-event="synchronous">同步</a>
+}
+
+@section LayuiScripts{
+    $(".data-synchronous-btn").on("click", function () {
+    var checkStatus = table.checkStatus('currentTableId');
+    selectdata = checkStatus.data;
+    var index = layer.open({
+    title: '选择服务器',
+    type: 2,
+    shade: 0.2,
+    fixed: false,
+    maxmin: true,
+    area:['700px','auto'],
+    content: '/SelectServer',
+    });
+    $(window).on("resize", function () {
+    layer.full(index);
+    });
+    return false;
+    });
+}
+
+@section ListButtonClick{
+    else if(obj.event === 'see')
+    {
+    var index = layer.open({
+    title: '查看本地配置文件',
+    type: 2,
+    shade: 0.2,
+    maxmin: true,
+    shadeClose: true,
+    area: ['100%', '100%'],
+    content: '/JsonEditor?guid=' + data.guid + '&see=true',
+    });
+    $(window).on("resize", function () {
+    layer.full(index);
+    });
+    return false;
+    }
+    else if(obj.event === 'update')
+    {
+    var index = layer.open({
+    title: '修改本地配置文件',
+    type: 2,
+    shade: 0.2,
+    maxmin: true,
+    shadeClose: true,
+    area: ['100%', '100%'],
+    content: data.updateUrl + '?guid=' + data.guid,
+    });
+    $(window).on("resize", function () {
+    layer.full(index);
+    });
+    return false;
+    }
+    else if(obj.event === 'synchronous'){
+    selectdata = new Array(data);
+    var index = layer.open({
+    title: '选择服务器',
+    type: 2,
+    shade: 0.2,
+    fixed: false,
+    maxmin: true,
+    area:['700px','auto'],
+    content: '/SelectServer',
+    });
+    $(window).on("resize", function () {
+    layer.full(index);
+    });
+    return false;
+    }
+}
+
+@section Css{
+}
+
+@section Scripts{
+}

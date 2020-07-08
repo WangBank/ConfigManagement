@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "数据库链接列表";
+    Layout = "~/Views/Shared/_ListLayout.cshtml";
+    string typeName = "DataBase";
+    ViewBag.AddUrl = $"/Add{typeName}Info";
+    ViewBag.DeleteUrl = $"/Api/Delete{typeName}Info";
+    ViewBag.UpdateUrl = $"/Update{typeName}Info";
+    ViewBag.ListUrl = $"/Api/Get{typeName}List";
+}
+
+@section cols{
+    [[
+    { type: "checkbox", width: 50, fixed: "left" },
+    { field: 'guid', title: 'guid', hide: true },
+    { field: 'dataBaseType', width: 150, title: '数据库类型' },
+    { field: 'businessType', width: 150, title: '业务类型',sort: true },
+    { field: 'accountSetName', width: 150, title: '账套名称' },
+    { field: 'accountSetNumber', width: 150, title: '账套号' },
+    { field: 'serverAddress', minWidth: 150, title: '服务器地址' },
+    { field: 'port', width: 100, title: '端口' },
+    { field: 'userName', width: 150, title: '用户名' },
+    { field: 'dataBaseName', width: 150, title: '数据库名称' },
+    { title: '操作', width: 200, templet: '#currentTableBar', fixed: "right", align: "center" }
+    ]]
+}
+
+@section ToolbarButton{
+    @*<button class="layui-btn layui-btn-sm layui-btn-normal data-build-btn"> 生成 </button>*@
+}
+
+@section LayuiScripts{
+    $(".data-build-btn").on("click", function () {
+    var index = layer.open({
+    title: '预览',
+    type: 2,
+    shade: 0.2,
+    maxmin: true,
+    shadeClose: true,
+    area: ['100%', '100%'],
+    content: '/JsonPreview',
+    });
+    $(window).on("resize", function () {
+    layer.full(index);
+    });
+
+    return false;
+    });
+    @*var upload = layui.upload;
+        //执行实例
+        var uploadInst = upload.render({
+        elem: '#import' //绑定元素
+        ,url: '/Api/ImportPublicDataAdapters' //上传接口
+        ,accept: 'file'
+        ,done: function(res){
+        //上传完毕回调
+        }
+        ,error: function(){
+        //请求异常回调
+        }
+        });*@
+}
+

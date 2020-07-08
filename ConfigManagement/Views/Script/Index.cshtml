@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "脚本列表";
+    Layout = "~/Views/Shared/_ListLayout.cshtml";
+    string typeName = "Script";
+    ViewBag.AddUrl = $"/Add{typeName}Info";
+    ViewBag.DeleteUrl = $"/Api/Delete{typeName}Info";
+    ViewBag.UpdateUrl = $"/Update{typeName}Info";
+    ViewBag.ListUrl = $"/Api/Get{typeName}List";
+}
+
+
+@section cols{
+    [[
+    { type: "checkbox", width: 50, fixed: "left" },
+    { field: 'guid', title: 'guid',hide:true },
+    { field: 'name', minwidth: 100, title: '脚本名称' },
+    { field: 'scriptContent', minwidth: 500, title: '脚本内容' },
+    { field: 'description', minwidth: 200, title: '脚本描述' },
+    { title: '操作', width: 150, templet: '#currentTableBar', fixed: "right", align: "center" }
+    ]]
+}
+
+
+@section Css{
+}
+
+@section Scripts{
+}

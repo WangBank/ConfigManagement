@@ -1,0 +1,66 @@
+﻿@model List<ConfigManagement.Models.Config.RedisInfo>
+@{
+    ViewData["Title"] = "UpdateRedis";
+    Layout = "~/Views/Shared/_UpdateLayout.cshtml";
+    ViewBag.Url = "/Api/UpdateRedisConfig";
+    ViewBag.FileName = "Redis.json";
+}
+<input type="hidden" name="Guid" value="@ViewBag.Guid">
+<div class="layui-form-item">
+    <label class="layui-form-label required">服务名</label>
+    <div class="layui-input-block">
+        <input type="text" name="ServiceName" lay-verify="required" lay-reqtext="服务名不能为空" placeholder="请输入服务名" value="" class="layui-input">
+        <tip>填写服务名 如:Master1</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">IP</label>
+    <div class="layui-input-block">
+        <input type="text" name="IP" lay-verify="required" lay-reqtext="IP不能为空" placeholder="请输入IP" value="" class="layui-input">
+        <tip>填写IP 如:127.0.0.1</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">端口</label>
+    <div class="layui-input-block">
+        <input type="text" name="Port" lay-verify="required" lay-reqtext="端口不能为空" placeholder="请输入端口" value="" class="layui-input">
+        <tip>填写IP 如:6379</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">地址</label>
+    <div class="layui-input-block">
+        <input type="text" name="Address" lay-verify="required" lay-reqtext="地址不能为空" placeholder="请输入地址" value="" class="layui-input">
+        <tip>填写IP 如:127.0.0.1:6379,password=romens</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">实例名称</label>
+    <div class="layui-input-block">
+        <input type="text" name="InstanceName" lay-verify="required" lay-reqtext="实例名称不能为空" placeholder="请输入实例名称" value="" class="layui-input">
+        <tip>填写实例名称 如:ERP</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">密码</label>
+    <div class="layui-input-block">
+        <input type="text" name="Password" lay-verify="required" lay-reqtext="密码不能为空" placeholder="请输入密码" value="" class="layui-input">
+        <tip>填写密码</tip>
+    </div>
+</div>
+
+@section Form{
+    form.val("form", {
+    "ServiceName": "@Html.Raw(Model[0].ServiceName)",
+    "IP": "@Html.Raw(Model[0].Servers[0].IP)",
+    "Port":"@Html.Raw(Model[0].Servers[0].Port)",
+    "Address": "@Html.Raw(Model[0].Address)",
+    "InstanceName": "@Html.Raw(Model[0].InstanceName)",
+    "Password": "@Html.Raw(Model[0].Password)",
+    });
+}

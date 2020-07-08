@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Redis地址配置列表";
+    Layout = "~/Views/Shared/_ListLayout.cshtml";
+    string typeName = "RedisDBSetting";
+    ViewBag.AddUrl = $"/{typeName}/Add{typeName}Info";
+    ViewBag.DeleteUrl = $"/Api/Delete{typeName}Info";
+    ViewBag.UpdateUrl = $"/{typeName}/Edit{typeName}Info";
+    ViewBag.ListUrl = $"/Api/Get{typeName}List";
+    ViewBag.AddWinWidth = "100%";
+    ViewBag.AddWinHeight = "100%";
+}
+
+
+@section cols{
+    [[
+    { type: "checkbox", width: 50, fixed: "left" },
+    { field: 'code', width: 120, title: '编号', sort: true },
+    { field: 'name', width: 150, title: '名称' },
+    { field: 'serverIp', minwidth: 120, title: '服务器' },
+    { title: '操作', width: 200, templet: '#currentTableBar', fixed: "right", align: "center" }
+    ]]
+}
+
+@section Css{
+}
+
+@section Scripts{
+}

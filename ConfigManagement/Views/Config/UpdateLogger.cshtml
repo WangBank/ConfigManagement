@@ -1,0 +1,38 @@
+﻿@model List<ConfigManagement.Models.Config.Logger>
+@{
+    ViewData["Title"] = "UpdateLogger";
+    Layout = "~/Views/Shared/_OperationLayout.cshtml";
+    ViewBag.Url = "/Api/UpdateLogger";
+}
+<input type="hidden" name="Guid" value="@ViewBag.Guid">
+<div class="layui-form-item">
+    <label class="layui-form-label required">数据适配器类型</label>
+    <div class="layui-input-block">
+        <input type="text" name="DataAdapterType" lay-verify="required" lay-reqtext="数据适配器类型不能为空" placeholder="请输入数据适配器类型" value="" class="layui-input">
+        <tip>填写数据适配器类型 如:Sqlite</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">数据库连接</label>
+    <div class="layui-input-block">
+        <input type="text" name="DbInfo" lay-verify="required" lay-reqtext="数据库连接不能为空" placeholder="请输入数据库连接" value="" class="layui-input">
+        <tip>填写数据库连接 如:Logs//Logs.s3db</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">日志级别</label>
+    <div class="layui-input-block">
+        <input type="text" name="LogLevel" lay-verify="required" lay-reqtext="日志级别不能为空" placeholder="请输入日志级别" value="" class="layui-input">
+        <tip>填写日志级别 如:Exception,Event:Sql</tip>
+    </div>
+</div>
+
+@section Form{
+    form.val("form", {
+    "DataAdapterType": "@Html.Raw(Model[0].DataAdapterType)",
+    "DbInfo": "@Html.Raw(Model[0].DbInfo)",
+    "LogLevel": "@Html.Raw(Model[0].LogLevel)",
+    });
+}

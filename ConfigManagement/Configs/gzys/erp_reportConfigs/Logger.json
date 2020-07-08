@@ -1,0 +1,7 @@
+﻿[
+  {
+    "DataAdapterType": "Sqlite",
+    "DbInfo": "Logs//Logs.s3db",
+    "LogLevel": "Exception,Event:Sql"
+  }
+]

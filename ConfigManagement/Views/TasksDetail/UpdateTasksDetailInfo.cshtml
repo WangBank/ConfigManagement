@@ -1,0 +1,78 @@
+﻿@model TasksDetail
+@{
+    ViewData["Title"] = "更新脚本信息";
+    Layout = "~/Views/Shared/_OperationLayout.cshtml";
+    ViewBag.Url = "/Api/UpdateTasksDetailInfo";
+}
+<input type="hidden" name="guid" value="@Model.Guid">
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">任务名称</label>
+    <div class="layui-input-inline" style="width:50%">
+        <select name="taskCode" lay-verify="required">
+            <option value="">请选择任务</option>
+            @{
+                List<Tasks> tasksList = (List<Tasks>)ViewBag.TasksList;
+                foreach (var item in tasksList)
+                {
+                    <option value=@item.Guid>@item.Name</option>
+                }
+            }
+
+        </select>
+
+        <tip>请选择任务</tip>
+    </div>
+</div>
+
+
+<div class="layui-form-item">
+    <label class="layui-form-label">账套名称</label>
+    <div class="layui-input-inline" style="width:50%">
+        <select name="orgCode" lay-verify="required">
+            <option value="">请选择账套</option>
+            @{
+                List<Organization> orgList = (List<Organization>)ViewBag.OrgList;
+                foreach (var item in orgList)
+                {
+                    <option value=@item.Guid>@item.Name</option>
+                }
+            }
+        </select>
+        <tip>请选择账套</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">脚本名称</label>
+    <div class="layui-input-inline" style="width:50%">
+        <select name="scriptCode" lay-verify="required">
+            <option value="">请选择脚本</option>
+            @{
+                List<Script> ScriptList = (List<Script>)ViewBag.ScriptList;
+                foreach (var item in ScriptList)
+                {
+                    <option value=@item.Guid>@item.Name</option>
+                }
+            }
+        </select>
+        <tip>请选择脚本</tip>
+    </div>
+
+</div>
+
+
+
+@section Css{
+}
+
+@section Scripts{
+}
+
+@section Form{
+    form.val("form", {
+    "taskCode": "@Html.Raw(Model.TaskCode)",
+    "scriptCode": "@Html.Raw(Model.ScriptCode)",
+    "orgCode": "@Html.Raw(Model.OrgCode)"
+    });
+}

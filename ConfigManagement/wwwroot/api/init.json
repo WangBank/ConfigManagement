@@ -1,0 +1,121 @@
+{
+  "clearInfo": {
+    "clearUrl": "api/clear.json"
+  },
+  "homeInfo": {
+    "title": "首页",
+    "icon": "fa fa-home",
+    "href": "/main"
+  },
+  "logoInfo": {
+    "title": "配置文件管理系统",
+    "image": "/images/logo2.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "常规管理",
+      "icon": "fa fa-address-book",
+      "child": [
+        {
+          "title": "配置文件管理",
+          "href": "/configlist",
+          "icon": "fa fa-file-code-o",
+          "target": "_self"
+        },
+        {
+          "title": "集群服务器设置",
+          "href": "/serverlist",
+          "icon": "fa fa-server",
+          "target": "_self"
+        },
+        {
+          "title": "数据库连接配置",
+          "href": "/dataBaselist",
+          "icon": "fa fa-database",
+          "target": "_self"
+        },
+        {
+          "title": "Redis配置",
+          "href": "/UpdateRedisConfig",
+          "icon": "fa fa-file",
+          "target": "_self"
+        },
+        {
+          "title": "RabbitMQ配置",
+          "href": "/UpdateRabbitMQConfig",
+          "icon": "fa fa-file-text-o",
+          "target": "_self"
+        }
+      ]
+    },
+    {
+      "title": "工具管理",
+      "icon": "fa fa-cog",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "Redis",
+          "href": "",
+          "icon": "fa fa-wrench",
+          "target": "",
+          "child": [
+            {
+              "title": "Redis地址",
+              "href": "/RedisDBSetting",
+              "icon": "fa fa-database",
+              "target": "_self"
+            },
+            {
+              "title": "Redis操作",
+              "href": "/RedisDev",
+              "icon": "fa fa-list",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "脚本执行管理",
+      "icon": "fa fa-cog",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "脚本执行管理",
+          "href": "",
+          "icon": "fa fa-wrench",
+          "target": "",
+          "child": [
+            {
+              "title": "任务管理",
+              "href": "/taskIndex",
+              "icon": "fa fa-file-text-o",
+              "target": "_self"
+            },
+            {
+              "title": "任务明细",
+              "href": "/tasksDetailIndex",
+              "icon": "fa fa-file-text-o",
+              "target": "_self"
+            },
+            {
+              "title": "账套信息",
+              "href": "/orgIndex",
+              "icon": "fa fa-database",
+              "target": "_self"
+            },
+            {
+              "title": "脚本信息",
+              "href": "/scriptIndex",
+              "icon": "fa fa-list",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

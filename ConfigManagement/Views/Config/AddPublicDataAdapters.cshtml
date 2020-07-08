@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewData["Title"] = "AddPublicDataAdapters";
+    Layout = "~/Views/Shared/_OperationLayout.cshtml";
+    ViewBag.Url = $"/Api/AddPublicDataAdapters?guid={ViewBag.Guid}";
+}
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">账套名称</label>
+    <div class="layui-input-block">
+        <input type="text" name="DataAdapterAccountName" lay-verify="required" lay-reqtext="账套名称不能为空" placeholder="请输入账套名称" value="" class="layui-input">
+        <tip>填写账套名称</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">账套号</label>
+    <div class="layui-input-block">
+        <input type="text" name="DataAdapterAlias" lay-verify="required" lay-reqtext="账套号不能为空" placeholder="请输入账套号" value="" class="layui-input">
+        <tip>填写账套号</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">数据库类型</label>
+    <div class="layui-input-block">
+        <input type="text" name="DataAdapterType" lay-verify="required" lay-reqtext="数据库类型不能为空" placeholder="请输入数据库类型" value="" class="layui-input">
+        <tip>填写数据库类型</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">数据库加密连接</label>
+    <div class="layui-input-block">
+        <textarea name="DataAdapterInfo" lay-verify="required" lay-reqtext="数据库加密连接不能为空" placeholder="请输入数据库加密连接" class="layui-textarea"></textarea>
+        <tip>填写数据库加密连接</tip>
+    </div>
+</div>
+
+
+

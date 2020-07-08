@@ -1,0 +1,32 @@
+﻿@{
+
+    ViewData["Title"] = "任务明细列表";
+    Layout = "~/Views/Shared/_ListLayout.cshtml";
+    string typeName = "TasksDetail";
+    ViewBag.AddUrl = $"/Add{typeName}Info";
+    ViewBag.DeleteUrl = $"/Api/Delete{typeName}Info";
+    ViewBag.UpdateUrl = $"/Update{typeName}Info";
+    ViewBag.ListUrl = $"/Api/Get{typeName}List";
+}
+
+
+@section cols{
+    [[
+    { type: "checkbox", width: 50, fixed: "left" },
+    { field: 'guid', title: 'guid',hide:true },
+    { field: 'taskCode', width: 100, title: '任务编号' },
+    { field: 'taskName', minwidth: 100, title: '任务名称' },
+    { field: 'scriptCode', width: 100, title: '脚本编号' },
+    { field: 'scriptName', minwidth: 100, title: '脚本名称' },
+    { field: 'orgCode', width: 100, title: '账套编号' },
+    { field: 'orgName', minwidth: 100, title: '账套名称' },
+    { title: '操作', width: 150, templet: '#currentTableBar', fixed: "right", align: "center" }
+    ]]
+}
+
+
+@section Css{
+}
+
+@section Scripts{
+}

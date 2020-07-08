@@ -1,0 +1,281 @@
+﻿@{
+    Layout = null;
+    string typeName = "RedisDev";
+    ViewBag.ListUrl = $"/Api/Get{typeName}List";
+    ViewBag.AddUrl = $"/{typeName}/Add{typeName}Info";
+    ViewBag.UpdateUrl = $"/{typeName}/Edit{typeName}Info";
+    ViewBag.DeleteUrl = $"/Api/Delete{typeName}";
+    ViewBag.AddWinWidth = "40%";
+    ViewBag.AddWinHeight = "90%";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+
+            <div class="layui-row">
+                <div class="layui-col-md12">
+                    <fieldset class="table-search-fieldset">
+                        <legend>搜索</legend>
+                        <div style="margin: 10px 10px 10px 10px">
+                            <form class="layui-form layui-form-pane" action="">
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">Redis地址</label>
+                                        <div class="layui-input-inline">
+                                            <div class="layui-input-inline">
+                                                <select name="redisaddr" id="redisaddr" lay-verify="required" lay-search="">
+                                                    <option value="">选择地址</option>
+                                                    @foreach (RedisDBSetting item in ViewBag.RedisDBAddressInfo as List<RedisDBSetting>)
+                                                    {
+                                                            <option value="@item.Code">@Html.Raw(item.Name)</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">数据库</label>
+                                        <div class="layui-input-inline">
+                                            <div class="layui-input-inline">
+                                                <select name="redisdb" id="redisdb" lay-search="">
+                                                    <option value="-1">默认</option>
+                                                    <option value="0" selected>DB0</option>
+                                                    <option value="1">DB1</option>
+                                                    <option value="2">DB2</option>
+                                                    <option value="3">DB3</option>
+                                                    <option value="4">DB4</option>
+                                                    <option value="5">DB5</option>
+                                                    <option value="6">DB6</option>
+                                                    <option value="7">DB7</option>
+                                                    <option value="8">DB8</option>
+                                                    <option value="9">DB9</option>
+                                                    <option value="10">DB10</option>
+                                                    <option value="11">DB11</option>
+                                                    <option value="12">DB12</option>
+                                                    <option value="13">DB13</option>
+                                                    <option value="14">DB14</option>
+                                                    <option value="15">DB15</option>
+                                                    <option value="16">DB16</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-col-md8">
+                                        <div>
+                                            <label class="layui-form-label">Key查询</label>
+                                            <div class="layui-input-block">
+                                                <input id="searchkey" type="text" name="searchkey" lay-verify="title" autocomplete="off" placeholder="&#xe615;" class="layui-input layui-icon layui-icon-search">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon layui-icon-search"> </i> 搜 索</button>
+                                        <button id="batch_remove_btn" type="button" class="layui-btn layui-btn-danger"><i class="layui-icon layui-icon-delete"> </i> 移 除</button>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md12" style="padding-left:110px;padding-top:10px;">
+                                    <p>
+                                        *: 通配任意多个字符 ?: 通配单个字符 []: 通配括号内的某1个字符
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body">
+                            <button id="add_btn" class="layui-btn data-add-btn" type="button">
+                                <i class="layui-icon layui-icon-add-1"></i>
+                                <span>SET</span>
+                            </button>
+                            <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+                            <script type="text/html" id="currentTableBar">
+                                <a class="layui-btn layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+                                <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="~/lib/layui-v2.5.5/layui.js"></script>
+    <script src="~/js/utils.js"></script>
+    <script>
+         layui.use(['form', 'table', 'layedit', 'laydate'], function () {
+             var form = layui.form
+                 , layer = layui.layer
+                 , layedit = layui.layedit
+                 , laydate = layui.laydate;
+             table = layui.table;
+             var loadingMsg = layer.msg('数据请求中', { icon: 16, scrollbar: false, time: 0 });
+            var tableIns = table.render({
+                elem: '#currentTableId',
+                url: '@ViewBag.ListUrl',
+                //url: '@ViewBag.ListUrl' + '?redisaddr=' + $("#RedisAddr").val() + '&redisdb=' + $("#RedisDb").val() + '&searchkey=' + $("#searchkey").val(),
+                toolbar: '#toolbar',
+                defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示',
+                    layEvent: 'LAYTABLE_TIPS',
+                    icon: 'layui-icon-tips'
+                }],
+                id : "tableListTable",
+                cols: [[
+                    { field: 'type', width: 200, title: '类型', sort: true },
+                    { field: 'key', minwidth: 200, title: '键' },
+                    { field: 'ttl', width: 200, title: 'TTL' },
+                    { title: '操作', width: 200, templet: '#currentTableBar', fixed: "right", align: "center" }
+                ]],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 15,
+                page: true,
+                done: function(res, curr, count){
+                        // 关闭提示层
+                    layer.close(loadingMsg);
+                    bindTableToolbarFunction();
+                    }
+            });
+
+              function bindTableToolbarFunction() {
+                //所有的绑定事件，如：
+                // 监听添加操作
+                  $("#add_btn").on("click", function () {
+                      if (!Check()) {
+                          return false;
+                      }
+                    var index = layer.open({
+                        title: '添加',
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['@ViewBag.AddWinWidth', '@ViewBag.AddWinHeight'],
+                        content: '@ViewBag.AddUrl?redisaddr=' + $("#redisaddr").val()+'&redisdb=' + $("#redisdb").val(),
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                    //reloadWhereTable($("#redisaddr").val(), $("#redisdb").val(), $("#searchkey").val());
+                      return false;
+                });
+                // 监听删除操作
+                  $("#batch_remove_btn").on("click", function () {
+                      var redisaddr = $("#redisaddr").val();
+                      var redisdb = $("#redisdb").val();
+                      var searchkey = $("#searchkey").val();
+                      layer.confirm('确定删除吗?', function (index) {
+                          ajax_emptypara_delete(`@ViewBag.DeleteUrl?redisaddr=${ redisaddr }&redisdb=${redisdb}&searchkey=${ searchkey }`);
+                          reloadWhereTable(redisaddr, redisdb, $("#searchkey").val());
+                          return false;
+                      });
+                });
+            }
+
+             // 监听搜索操作
+             form.on('submit(data-search-btn)', function (data) {
+                 var result = JSON.stringify(data.field);
+                 reloadWhereTable(data.field.redisaddr, data.field.redisdb, data.field.searchkey)
+                 return false;
+             });
+
+             table.on('tool(currentTableFilter)', function (obj) {
+                 var data = obj.data;
+                 //console.log(data);
+                 var redisaddr = $("#redisaddr").val();
+                 var redisdb = $("#redisdb").val();
+                 var searchkey = data.key;
+                 if (obj.event === 'delete') {
+                    layer.confirm('确定删除吗?', function (index) {
+                        ajax_emptypara_delete(`@ViewBag.DeleteUrl?redisaddr=${redisaddr}&redisdb=${redisdb}&searchkey=${searchkey}`);
+                        reloadWhereTable(redisaddr, redisdb, $("#searchkey").val());
+                        layer.close(index);
+                        return false;
+                    });
+                }else if (obj.event === 'edit') {
+                    var index = layer.open({
+                    title: '编辑',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['@ViewBag.AddWinWidth', '@ViewBag.AddWinHeight'],
+                        content: `@ViewBag.UpdateUrl?redisaddr=${redisaddr}&redisdb=${redisdb}&searchkey=${searchkey}`,
+                    });
+                    $(window).on("resize", function () {
+                    layer.full(index);
+                    });
+                     //reloadWhereTable(redisaddr, redisdb, $("#searchkey").val());
+                    return false;
+                    }
+             });
+
+             // 刷新表格数据
+             function reloadTable() {
+                 // 加载提示
+                 loadingMsg = layer.msg('数据请求中', { icon: 16, scrollbar: false, time: 0 });
+                 // 重新加载数据
+                 table.reload("tableListTable", {
+                     page: {
+                         curr: 1 //重新从第 1 页开始
+                     },
+                     done: function (res, curr, count) {
+                         layer.close(loadingMsg);
+                         //bindTableToolbarFunction()
+                     }
+                 });
+             }
+
+             // 刷新表格数据
+             function reloadWhereTable(redisaddr, redisdb, searchkey) {
+                 // 加载提示
+                 loadingMsg = layer.msg('数据请求中', { icon: 16, scrollbar: false, time: 0 });
+                 // 重新加载数据
+                 table.reload("tableListTable", {
+                     page: {
+                         curr: 1 //重新从第 1 页开始
+                     },
+                     where: {
+                         redisaddr: String(redisaddr),
+                         redisdb: redisdb,
+                         searchkey: String(searchkey)
+                     },
+                     done: function (res, curr, count) {
+                         layer.close(loadingMsg);
+                         //bindTableToolbarFunction()
+                     }
+                 });
+             }
+
+         });
+
+
+        function Check() {
+            if (!$("#redisaddr").val().length > 0) {
+                layer.msg('请先选择要操作的Redis地址');
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    </script>
+
+</body>
+</html>

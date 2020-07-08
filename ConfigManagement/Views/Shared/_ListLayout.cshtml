@@ -1,0 +1,186 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>@ViewData["Title"]</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    @RenderSection("Css", required: false)
+</head>
+<body>
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            @RenderBody()
+            <script type="text/html" id="toolbar">
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-sm data-add-btn"> 新增 </button>
+                    <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn"> 删除 </button>
+                    @if (ViewBag.IsTask == "1")
+                    {
+                        <button class="layui-btn layui-btn-sm data-exec-btn  layui-btn-normal" lay-event="exec">执行</button>
+                    }
+                    @RenderSection("ToolbarButton", required: false)
+                </div>
+            </script>
+
+            <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+            <table class="layui-hide" id="taskDetailId" lay-filter="taskDetailFilter"></table>
+
+            <script type="text/html" id="currentTableBar">
+                @if (ViewBag.IsTask == "1")
+                {
+                    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="exec">执行</a>
+                }
+                <a class="layui-btn layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+                @RenderSection("ListButton", required: false)
+            </script>
+
+        </div>
+    </div>
+    <script src="/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script src="~/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="~/js/utils.js"></script>
+    <script>
+        var table;
+        var selectdata;
+        layui.use(['form', 'table','upload'], function () {
+            var $ = layui.jquery,
+            table = layui.table;
+
+            table.render({
+                elem: '#currentTableId',
+                url: '@ViewBag.ListUrl',
+                toolbar: '#toolbar',
+                defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示',
+                    layEvent: 'LAYTABLE_TIPS',
+                    icon: 'layui-icon-tips'
+                }],
+                cols: @RenderSection("cols", required: false),
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 15,
+                page: true
+            });
+
+            // 监听添加操作
+            $(".data-add-btn").on("click", function () {
+
+                var index = layer.open({
+                    title: '添加',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: '@ViewBag.AddUrl',
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+
+                return false;
+            });
+
+            // 监听删除操作
+            $(".data-delete-btn").on("click", function () {
+                var checkStatus = table.checkStatus('currentTableId');
+                var data = checkStatus.data;
+                layer.confirm('确定删除吗?', function (index) {
+                    ajax_delete('@ViewBag.DeleteUrl', data);
+                    layer.close(index);
+                });
+            });
+
+            // 监听执行操作
+            $(".data-exec-btn").on("click", function () {
+                var checkStatus = table.checkStatus('currentTableId');
+                var data = checkStatus.data;
+                layer.confirm('确定执行选中任务吗?', function (index) {
+                    ajax_exec('/Api/ExecTask', data);
+                    layer.close(index);
+                });
+            });
+
+            //监听表格复选框选择
+            table.on('checkbox(currentTableFilter)', function (obj) {
+                console.log(obj)
+            });
+
+            //点击任务计划，会显示相应的明细
+            table.on('row(currentTableFilter)', function (obj) {
+                var data = obj.data;
+                var guid = data.guid;
+                if ('@ViewBag.IsTask' == '1') {
+                    table.render({
+                        elem: '#taskDetailId'
+                        , url: '/Api/GetTasksDetailList?guid=' + guid
+                        , cellMinWidth: 80
+                        , cols:
+                            [[
+                                { field: 'guid', title: 'guid', hide: true },
+                                { field: 'taskCode', width: 100, title: '任务编号', hide: true  },
+                                { field: 'taskName', minwidth: 100, title: '任务名称', hide: true },
+                                { field: 'scriptCode', width: 100, title: '脚本编号' },
+                                { field: 'scriptName', minwidth: 100, title: '脚本名称' },
+                                { field: 'orgCode', width: 100, title: '账套编号' },
+                                { field: 'orgName', minwidth: 100, title: '账套名称' }
+                            ]]
+                        , page: true
+                    });
+                }
+
+                //标注选中样式
+                obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+            });
+
+            table.on('tool(currentTableFilter)', function (obj) {
+              var data = obj.data;
+               if (obj.event === 'edit')
+               {
+                  var index = layer.open({
+                    title: '编辑',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: '@ViewBag.UpdateUrl?guid=' + data.guid,
+                  });
+                  $(window).on("resize", function () {
+                      layer.full(index);
+                  });
+                  return false;
+                }
+                else if (obj.event === 'exec')
+                {
+                    var arrayObj = new Array(data);
+                   ajax_exec('/Api/ExecTask', arrayObj);
+                    layer.close(index);
+                }
+                else if (obj.event === 'delete')
+                {
+                    layer.confirm('确定删除吗?', function (index) {
+                        var arrayObj = new Array(data);
+                        ajax_delete('@ViewBag.DeleteUrl', arrayObj);
+                        layer.close(index);
+                    });
+                }@RenderSection("ListButtonClick", required: false)
+            });
+            @RenderSection("LayuiScripts", required: false)
+        });
+        @RenderSection("Scripts", required: false)
+    </script>
+
+</body>
+</html>
+
+

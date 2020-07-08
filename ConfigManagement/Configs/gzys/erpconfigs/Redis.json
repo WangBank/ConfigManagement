@@ -1,0 +1,15 @@
+﻿[
+  {
+    "Mode": "redis",
+    "ServiceName": "Master",
+    "Servers": [
+      {
+        "IP": "172.18.231.180",
+        "Port": 6379
+      }
+    ],
+    "Address": "172.18.231.180:6379,password=romens",
+    "InstanceName": "ERP",
+    "Password": "romens"
+  }
+]

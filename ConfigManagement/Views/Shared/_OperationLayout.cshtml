@@ -1,0 +1,101 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>@ViewData["Title"]</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+    @RenderSection("Css", required: false)
+</head>
+<body>
+    <div class="layui-form layuimini-form" lay-filter="form">
+        @RenderBody()
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                @if (ViewBag.IsOrg == "1")
+                {
+                    <button class="layui-btn" lay-submit lay-filter="testConn">测试连接</button>
+                }
+                <button class="layui-btn" lay-submit lay-filter="saveBtn">保存</button>
+
+                <button class="layui-btn layui-btn-primary" id="cancelBtn">取消</button>
+            </div>
+        </div>
+    </div>
+    <script src="/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script src="~/lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="~/js/utils.js"></script>
+    <script>
+
+        layui.use(['form'], function () {
+            var form = layui.form,
+                $ = layui.$;
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+                ajax_post('@ViewBag.Url',data.field);
+            });
+            form.on('submit(testConn)', function (data) {
+                var dataDetail = JSON.stringify(data.field);
+                console.log(dataDetail);
+                $.ajax({
+                    url: "/org/TestConn",
+                    async: false,
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json;charset=UTF-8",
+                    data: dataDetail,
+                    success: function (dataResult) {
+                        parent.layer.msg(dataResult.msg);
+                    }
+                });
+
+            });
+            
+            $("#cancelBtn").click(function () {
+                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(iframeIndex);
+            });
+            @RenderSection("Form", required: false)
+        });
+
+        @RenderSection("Scripts", required: false)
+
+        //导入脚本文件
+        layui.use('upload', function () {
+            var $ = layui.jquery
+                , upload = layui.upload;
+
+            //拖拽上传
+            upload.render({
+                elem: '#importFile'
+                , accept: 'file' //普通文件
+                , exts: 'txt|sql' //只允许上传脚本文件
+                , url: '/Api/GetFileContext' //改成您自己的上传接口
+                , done: function (res) {
+                    layui.$('#scriptContent').val(res.data);
+                    layer.msg('导入成功');
+                    //console.log(res);
+                   
+                }
+            });
+
+        });
+    </script>
+
+</body>
+</html>
+

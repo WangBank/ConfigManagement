@@ -1,0 +1,70 @@
+﻿@model ServerInfo
+@{
+    ViewData["Title"] = "修改";
+    Layout = "~/Views/Shared/_OperationLayout.cshtml";
+    ViewBag.Url = "/Api/UpdateServerInfo";
+}
+<input type="hidden" name="Guid" value="@Model.Guid">
+<div class="layui-form-item">
+    <label class="layui-form-label required">业务分类</label>
+    <div class="layui-input-block">
+        <select name="BusinessGuid" lay-verify="">
+            @*<option value="">请选择一个城市</option>*@
+            @foreach (BusinessCategory item in ViewBag.BusinessCategory as List<BusinessCategory>)
+            {
+                if (Model.BusinessGuid == item.Guid)
+                {
+                    <option value="@item.Guid" selected>@Html.Raw(item.BusinessName)</option>
+                }
+                else
+                {
+                    <option value="@item.Guid">@Html.Raw(item.BusinessName)</option>
+                }
+            }
+        </select>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">服务器地址</label>
+    <div class="layui-input-block">
+        <input type="text" name="ServerAddress" lay-verify="required" lay-reqtext="服务器地址不能为空" placeholder="请输入服务器地址" value="@Model.ServerAddress" class="layui-input">
+        <tip>填写服务器地址</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">端口</label>
+    <div class="layui-input-block">
+        <input type="text" name="Port" lay-verify="required" lay-reqtext="端口不能为空" placeholder="请输入端口" value="" class="layui-input">
+        <tip>填写端口</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">用户名</label>
+    <div class="layui-input-block">
+        <input type="text" name="UserName" lay-verify="required" lay-reqtext="用户名不能为空" placeholder="请输入用户名" value="" class="layui-input">
+        <tip>填写用户名</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">密码</label>
+    <div class="layui-input-block">
+        <input type="password" name="Password" lay-verify="required" lay-reqtext="密码不能为空" placeholder="请输入密码" value="" class="layui-input">
+        <tip>填写密码</tip>
+    </div>
+</div>
+
+
+@section Form{
+    form.val("form", {
+    "BusinessName": "@Html.Raw(Model.BusinessName)",
+    "ServerAddress": "@Html.Raw(Model.ServerAddress)",
+    "Port": "@Html.Raw(Model.Port)",
+    "UserName": "@Html.Raw(Model.UserName)",
+    "Password": "@Html.Raw(Model.Password)"
+    });
+}
+

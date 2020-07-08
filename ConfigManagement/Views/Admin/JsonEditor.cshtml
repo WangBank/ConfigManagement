@@ -1,0 +1,105 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>JsonEditor</title>
+    <link href="~/lib/jsoneditor/jsoneditor.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/lib/layui-v2.5.5/css/layui.css" media="all">
+    <script src="~/lib/jsoneditor/jsoneditor.min.js"></script>
+</head>
+<body>
+
+    <div id="jsoneditor" style="width: 100%; height: 600px; margin:0 auto"></div>
+
+    @if (!ViewBag.See)
+    {
+        <div class="layui-input-block" style="margin-top:10px">
+            <button class="layui-btn" onclick="update()">保存</button>
+            <button class="layui-btn layui-btn-primary" onclick="cancel()">取消</button>
+        </div>
+    }
+    <script src="~/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script>
+        // create the editor
+        var container = document.getElementById("jsoneditor");
+        var options = {
+            mode: 'code'
+        };
+        var editor = new JSONEditor(container, options);
+        @if(ViewBag.See)
+        {
+            @Html.Raw("$(\"#jsoneditor\").height($(window).height());")
+        }
+        else
+        {
+            @Html.Raw("$(\"#jsoneditor\").height($(window).height()-60);")
+        }
+        
+        $(document).ready(function () {
+            $.ajax({
+                type: 'get',
+                url: '/api/GetConfigJson?guid=@(ViewBag.Guid)',
+                cache: false,
+                async: false,
+                success: function (result) {
+                    if (result.code == "0") {
+                        var data = result.data;
+                        console.log(data);
+                        editor.setText(data);
+                    }else if (result.code == "-2") {
+                        layer.msg(result.msg);
+                        parent.parent.parent.window.location.href = '/Login';
+                    }
+                    else {
+                        parent.layer.msg(result.msg);
+                        var iframeIndex = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(iframeIndex);
+                    }
+                },
+                error: function (msg) {
+                    parent.layer.msg("系统异常");
+                    var iframeIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(iframeIndex);
+                }
+            });
+        });
+
+        function update() {
+            $.ajax({
+                type: 'post',
+                url: '/api/UpdateConfigJson',
+                cache: false,
+                async: false,
+                contentType: 'application/json',
+                data: JSON.stringify({"Guid":"@(ViewBag.Guid)","Json":editor.getText()}),
+                success: function (result) {
+                    if (result.code == "0") {
+                        parent.layer.msg("操作成功");
+                        var iframeIndex = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(iframeIndex);
+                    }else if (result.code == "-2") {
+                        parent.parent.parent.window.location.href = '/Login';
+                    }
+                    else {
+                        parent.layer.msg("操作失败");
+                    }
+                },
+                error: function (msg) {
+                    parent.layer.msg("系统异常");
+                }
+            });
+        }
+
+        function cancel() {
+            var iframeIndex = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(iframeIndex);
+        }
+    </script>
+</body>
+</html>

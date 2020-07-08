@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewData["Title"] = "添加";
+    Layout = "~/Views/Shared/_OperationLayout.cshtml";
+    ViewBag.Url = "/Api/AddConfigInfo";
+}
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">配置文件名</label>
+    <div class="layui-input-block">
+        <input type="text" name="ConfigName" lay-verify="required" lay-reqtext="配置文件名不能为空" placeholder="请输入配置文件名" value="" class="layui-input">
+        <tip>填写配置文件名</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">配置文件路径</label>
+    <div class="layui-input-block">
+        <input type="text" name="ConfigPath" lay-verify="required" lay-reqtext="配置文件路径不能为空" placeholder="请输入配置文件路径" value="" class="layui-input">
+        <tip>填写配置文件路径</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">本地路径</label>
+    <div class="layui-input-block">
+        <input type="text" name="LocalPath" lay-verify="required" lay-reqtext="本地路径不能为空" placeholder="请输入本地路径" value="" class="layui-input">
+        <tip>填写本地路径</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label required">配置文件类别</label>
+    <div class="layui-input-block">
+        <select name="CategoryType" lay-verify="">
+            <option value="业务中间层">业务中间层</option>
+            <option value="报表中间层">报表中间层</option>
+            <option value="其他">其他</option>
+        </select>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-block">
+        <textarea name="Remarks" placeholder="请输入备注" class="layui-textarea"></textarea>
+        <tip>填写备注</tip>
+    </div>
+</div>
+
+<div class="layui-form-item">
+    <label class="layui-form-label">更新页面地址</label>
+    <div class="layui-input-block">
+        <input type="text" name="UpdateUrl" placeholder="请输入更新页面地址" value="" class="layui-input">
+        <tip>填写更新页面地址</tip>
+    </div>
+</div>
+
+@section Css{
+
+}
+
+@section Scripts{
+}

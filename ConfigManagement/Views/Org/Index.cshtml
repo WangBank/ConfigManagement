@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewData["Title"] = "账套列表";
+    Layout = "~/Views/Shared/_ListLayout.cshtml";
+    string typeName = "Org";
+    ViewBag.AddUrl = $"/Add{typeName}Info";
+    ViewBag.DeleteUrl = $"/Api/Delete{typeName}Info";
+    ViewBag.UpdateUrl = $"/Update{typeName}Info";
+    ViewBag.ListUrl = $"/Api/Get{typeName}List";
+}
+
+
+@section cols{
+    [[
+    { type: "checkbox", width: 50, fixed: "left" },
+    { field: 'guid', title: 'guid',hide:true },
+    { field: 'name', width: 150, title: '账套名称' },
+    { field: 'dbType', width: 100, title: '账套类型', sort: true , templet: function(d){
+    if (d.dbType=="0") {
+    return "Oracle";
+    } else if (d.dbType=="1") {
+    return "SqlServer";
+    }else if (d.dbType=="2") {
+    return "Mysql";
+    }
+    }},
+    { field: 'serverName', width: 200, title: '账套IP' },
+    { field: 'userName', width: 80, title: '登录名' },
+    { field: 'dataBaseName', width: 150, title: '数据库名称' },
+    { field: 'connectingString', minwidth: 500, title: '链接字符串' },
+    { field: 'description', width: 200, title: '描述' },
+    { title: '操作', width: 150, templet: '#currentTableBar', fixed: "right", align: "center" }
+    ]]
+}
+
+
+@section LayuiScripts{
+    $(".data-synchronous-btn").on("click", function () {
+    var checkStatus = table.checkStatus('currentTableId');
+    selectdata = checkStatus.data;
+    var index = layer.open({
+    title: '选择服务器',
+    type: 2,
+    shade: 0.2,
+    fixed: false,
+    maxmin: true,
+    area:['700px','auto'],
+    content: '/SelectServer',
+    });
+    $(window).on("resize", function () {
+    layer.full(index);
+    });
+    return false;
+    });
+}
+
+@section ListButtonClick{
+    else if(obj.event === 'see')
+    {
+    var index = layer.open({
+    title: '查看本地配置文件',
+    type: 2,
+    shade: 0.2,
+    maxmin: true,
+    shadeClose: true,
+    area: ['100%', '100%'],
+    content: '/JsonEditor?guid=' + data.guid + '&see=true',
+    });
+    $(window).on("resize", function () {
+    layer.full(index);
+    });
+    return false;
+    }
+    else if(obj.event === 'update')
+    {
+    var index = layer.open({
+    title: '修改本地配置文件',
+    type: 2,
+    shade: 0.2,
+    maxmin: true,
+    shadeClose: true,
+    area: ['100%', '100%'],
+    content: data.updateUrl + '?guid=' + data.guid,
+    });
+    $(window).on("resize", function () {
+    layer.full(index);
+    });
+    return false;
+    }
+    else if(obj.event === 'synchronous'){
+    selectdata = new Array(data);
+    var index = layer.open({
+    title: '选择服务器',
+    type: 2,
+    shade: 0.2,
+    fixed: false,
+    maxmin: true,
+    area:['700px','auto'],
+    content: '/SelectServer',
+    });
+    $(window).on("resize", function () {
+    layer.full(index);
+    });
+    return false;
+    }
+}
+
+@section Css{
+}
+
+@section Scripts{
+}

@@ -1,0 +1,79 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>@ViewData["Title"]</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+    @RenderSection("Css", required: false)
+</head>
+<body>
+    <div class="layui-form layuimini-form" lay-filter="form">
+        @RenderBody()
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="saveBtn">保存</button>
+
+                <button class="layui-btn layui-btn-primary" id="refreshBtn">刷新</button>
+
+                <button class="layui-btn layui-btn-primary" lay-submit lay-filter="syncBtn">同步</button>
+            </div>
+        </div>
+    </div>
+    <script src="/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script src="~/lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="~/js/utils.js"></script>
+    <script>
+        var form;
+        var filename = "@ViewBag.FileName";
+        layui.use(['form'], function () {
+            form = layui.form,
+                layer = layui.layer,
+                $ = layui.$;
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+                ajax_update_post('@ViewBag.Url',data.field);
+            });
+
+            $("#refreshBtn").click(function () {
+                window.location.reload();
+            });
+
+            form.on('submit(syncBtn)', function (data) {
+
+                selectdata = new Array(data);
+                    var index = layer.open({
+                    title: '选择服务器',
+                    type: 2,
+                    shade: 0.2,
+                    fixed: false,
+                    maxmin: true,
+                    area:['700px','auto'],
+                    content: '/SelectServers',
+                    });
+                    $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            });
+            @RenderSection("Form", required: false)
+        });
+        @RenderSection("Scripts", required: false)
+    </script>
+
+</body>
+</html>
+
